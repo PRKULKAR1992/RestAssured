@@ -1,6 +1,7 @@
 package TestCases;
 
 
+import TestData.DataCoditioning;
 import Utilities.BaseClass;
 import Utilities.DataParser;
 import Utilities.DataReader;
@@ -23,13 +24,11 @@ public class Test extends BaseClass{
 
     @org.testng.annotations.Test
     public void TokenGeneration() throws IOException {
-
          ExtentTest test =extent.createTest(Thread.currentThread().getStackTrace()[1].getMethodName());
+
         RestAssured.baseURI = DataReader.ConfigFileReader().getProperty("endPoint1");
-       String response=given().log().all().header("Content-Type","application/json").header("Host","mahauthorizationapi.azurewebsites.net").body("{\n" +
-                       "    \"PlatformName\": \"WHATSAPP\",\n" +
-                       "    \"GUID\": \"a4b6fc7f-2eea-4658-b193-70b7696f68f1\"\n" +
-                       "}")
+       String response=given().log().all().header("Content-Type","application/json").header("Host","mahauthorizationapi.azurewebsites.net")
+               .body(DataCoditioning.PayLoadForTokenGeneration("a4b6fc7f-2eea-4658-b193-70b7696f68f1","WHATSAPP"))
                .when().post(DataReader.ConfigFileReader().getProperty("resource1")).then().log().all().assertThat()
                .statusCode(200).extract().response().asString();
         var responseNode=test.createNode("Response Data");
@@ -40,20 +39,17 @@ public class Test extends BaseClass{
        System.out.println(token);
     }
 
-   @org.testng.annotations.Test
+   @org.testng.annotations.Test(dependsOnMethods={"TokenGeneration"})
     public void LoginRequest() throws IOException {
        RestAssured.baseURI =DataReader.ConfigFileReader().getProperty("endPoint2");
-       given().header("Content-Type","application/json")
+       given().log().all().header("Content-Type","application/json")
                .header("Host","qa-api.dstvafrica.com")
                .header("Authorization","Bearer "+token)
                .queryParam("channel","mydstv")
                .queryParam("BusinessUnit","dstv")
-               .body("{\n" +
-               "  \"country\": \"malawi\",\n" +
-               "  \"surname\": \"BANGURA\",\n" +
-               "  \"mobileNumber\": \"\",\n" +
-               "  \"smartCardNumber\": \"8061164508\"\n" +
-               "}").when().post(DataReader.ConfigFileReader().getProperty("resource2")).then().log().all().assertThat().statusCode(200);
+               .body(DataCoditioning.PayloadForLoginRequest("Sierra Leone","BANGURA","","4264001345"))
+               .when().post(DataReader.ConfigFileReader().getProperty("resource2"))
+               .then().log().all().assertThat().statusCode(200);
     }
 
 
