@@ -2,6 +2,7 @@ package TestCases;
 
 
 import TestData.DataCoditioning;
+import TestData.TestDataProvider;
 import Utilities.BaseClass;
 import Utilities.DataParser;
 import Utilities.DataReader;
@@ -43,12 +44,7 @@ public class Test extends BaseClass{
        System.out.println(token);
     }
 
-    @DataProvider(name = "data-provider")
-    public Object[] dpMethod(){
-        return new Object[][] {{"Sierra Leone","BANGURA","","4264001345"}, {"Kenya","SERENA","","4113015950"}};
-    }
-
-   @org.testng.annotations.Test(dependsOnMethods = "TokenGeneration", dataProvider = "data-provider")
+   @org.testng.annotations.Test(dependsOnMethods = "TokenGeneration", dataProvider = "data-provider", dataProviderClass = TestDataProvider.class)
     public void LoginRequest(String country, String surname, String mobileNo, String smartCardNo) throws IOException {
        test =extent.createTest(Thread.currentThread().getStackTrace()[1].getMethodName());
 
