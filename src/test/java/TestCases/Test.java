@@ -7,11 +7,15 @@ import Utilities.DataParser;
 import Utilities.DataReader;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -39,7 +43,12 @@ public class Test extends BaseClass{
        System.out.println(token);
     }
 
-   @org.testng.annotations.Test(dependsOnMethods={"TokenGeneration"},dataProvider = "data-provider")
+    @DataProvider(name = "data-provider")
+    public Object[] dpMethod(){
+        return new Object[][] {{"Sierra Leone","BANGURA","","4264001345"}, {"Kenya","SERENA","","4113015950"}};
+    }
+
+   @org.testng.annotations.Test(dependsOnMethods = "TokenGeneration", dataProvider = "data-provider")
     public void LoginRequest(String country, String surname, String mobileNo, String smartCardNo) throws IOException {
        test =extent.createTest(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -56,6 +65,19 @@ public class Test extends BaseClass{
        responseNode.info(response);
     }
 
+    @AfterMethod
+    public void getResult(ITestResult result)
+    {
+        if(result.getStatus()==ITestResult.FAILURE)
+        {
+            test.log(Status.FAIL, result.getThrowable());
 
+        }
+        if(result.getStatus()==ITestResult.SUCCESS)
+        {
+            test.log(Status.PASS,"Test Passed");
+
+        }
+    }
 
 }
