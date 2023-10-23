@@ -26,7 +26,7 @@ import static io.restassured.RestAssured.*;
 
 public class Test extends BaseClass{
     String token;
-    ExtentTest test;
+
     @org.testng.annotations.Test
     public void TokenGeneration() throws IOException {
          test =extent.createTest(Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -60,20 +60,4 @@ public class Test extends BaseClass{
        var responseNode=test.createNode("Response Data");
        responseNode.info(response);
     }
-
-    @AfterMethod
-    public void getResult(ITestResult result)
-    {
-        if(result.getStatus()==ITestResult.FAILURE)
-        {
-            test.log(Status.FAIL, result.getThrowable());
-
-        }
-        if(result.getStatus()==ITestResult.SUCCESS)
-        {
-            test.log(Status.PASS,"Test Passed");
-
-        }
-    }
-
 }
