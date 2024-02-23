@@ -42,6 +42,7 @@ public class Test extends BaseClass{
        JsonPath js= DataParser.JsonParsing(response);
        this.token=js.getString("Token");
        System.out.println(token);
+
     }
 
    @org.testng.annotations.Test(dependsOnMethods = "TokenGeneration", dataProvider = "data-provider", dataProviderClass = TestDataProvider.class)
