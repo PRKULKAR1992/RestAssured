@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class DataReader {
     private Properties properties;
-    private static String propertyFilePath= FileSystems.getDefault().getPath("").toAbsolutePath() +"\\src\\test\\java\\Utilities\\Config.properties";
+    private static String propertyFilePath= FileSystems.getDefault().getPath("").toAbsolutePath() +"\\src\\main\\java\\Config.properties";
 
     public static Properties ConfigFileReader() throws IOException {
 
