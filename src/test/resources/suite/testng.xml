@@ -6,7 +6,7 @@
             <class name="TestCases.Test">
                 <methods>
                     <include name="TokenGeneration"/>
-
+                    <include name="LoginRequest"/>
                 </methods>
             </class>
         </classes>
